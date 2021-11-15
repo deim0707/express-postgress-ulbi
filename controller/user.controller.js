@@ -13,25 +13,25 @@ class UserController {
 
     async getAllUsers(req, res) {
         const allUsers = await db.query(`SELECT * FROM person;`);
-        return res.json(allUsers.rows);
+        res.json(allUsers.rows);
     }
 
     async getOneUser(req, res) {
-        const {id} = req.params;
+        const {id} = req.params; // http://localhost:8080/api/user/4
         const user = await db.query(`SELECT * FROM person where id = $1;`, [id]);
-        return res.json(user.rows[0]);
+        res.json(user.rows[0]);
     }
 
     async updateUser(req, res) {
         const {id, name, surname} = req.body;
         const updatedUser = await db.query(`UPDATE person set name = $1, surname = $2 where id = $3 RETURNING *`, [name, surname, id]);
-        return res.json(updatedUser.rows[0])
+        res.json(updatedUser.rows[0])
     }
 
     async deleteUser(req, res) {
         const {id} = req.params;
         const deletedUser = await db.query(`DELETE FROM person where id = $1;`, [id]);
-        return res.json(deletedUser.rows[0]); // почему-то не возвращает удалённый айтем
+        res.json(deletedUser.rows[0]); // почему-то не возвращает удалённый айтем
     }
 }
 
